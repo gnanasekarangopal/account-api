@@ -1,0 +1,206 @@
+openapi: '3.0.2'
+
+info:
+  title: Account API
+  version: '1.0'
+  contact:
+    name: Accenture
+    email: contact@example.com
+    url: https://example.com/
+
+tags:
+  - name: Account API
+    description: Account Service related operations
+    
+paths:
+  /account:
+    post:
+      description: Create Account
+      summary: Create Account
+      tags: [ 'Account API' ]
+      operationId: createAccount
+      requestBody:
+        description: "Create Account"
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/Account'   
+      responses:
+        '200':
+          description: Account Create Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      operationId: updateAccount
+      description: Update Account
+      summary: Update Account
+      tags: [ 'Account API' ]      
+      requestBody:
+        description: "Update Account"
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/Account'   
+      responses:
+        '200':
+          description: Account updated Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'       
+
+  /account/{id}:
+    delete:
+      operationId: deleteAccount
+      parameters:
+        - name: id
+          in: path
+          description: delete account
+          required: true
+          schema: 
+            type: string
+          
+      summary: Delete Account
+      tags: [ 'Account API' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Account Deleted Successfully          
+                
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+            
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'      
+    get:
+      operationId: getAccount
+      parameters:
+        - name: id
+          in: path
+          description: find Account
+          required: true
+          schema: 
+            type: string
+          
+      summary: Get account details
+      tags: [ 'Account API' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+            
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'      
+          
+components:
+  schemas:
+    Account:
+      description: This is a account model
+      type: object
+      required:
+        - "accountId"
+      properties:
+        accountId:
+          type: string
+          description: "Id of the account"
+          example: 12345
+          minLength: 5
+          maxLength: 8
+        accountNumber:
+          type: string
+          description: Account number detail
+          example: 56237823
+          minLength: 8
+          maxLength: 12
+        accountHolderName:
+          type: string
+          description: Name of the account holder
+          example: xyz
+        accountBranch:
+          type: string
+          description: Account branch address
+          example: 900 Main Street, 55
+
+    InternalServerError:
+        description: Internal Server Error
+        properties:
+          error:
+            type: integer
+            example: 500
+          message:
+            type: string
+            example: Internal Server Error  
+    NotFoundError:
+        description: Internal Server Error
+        properties:
+          error:
+            type: integer
+            example: 404
+          message:
+            type: string
+            example: Account Not Found
+    BadRequestError:
+        description: Internal Server Error
+        properties:
+          error:
+            type: integer
+            example: 400
+          message:
+            type: string
+            example: Invalid account id                
+            
+
